@@ -1,9 +1,12 @@
 import Routes from './Routes'
+import GoogleTokenProvider from './context/GoogleToken'
 
 function App() {
   return (
     <>
-      <Routes/>
+      <GoogleTokenProvider>
+        <Routes/>
+      </GoogleTokenProvider>
     </>
   );
 }

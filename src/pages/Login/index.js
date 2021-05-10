@@ -4,6 +4,13 @@ function Login() {
   return( 
     <>
       <GoogleBtn/>
+      <button
+        onClick={() => {
+          window.location.href = '/home';
+        }}
+      >
+        Go to Details
+      </button>
     </>
   )
 }

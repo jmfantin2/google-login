@@ -1,73 +1,58 @@
-import React, { Component } from 'react'
+import { useState } from 'react'
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import { useGoogleToken } from '../../context/GoogleToken'
 
 
 const CLIENT_ID = '758963107546-ekp2ltbr0pd3dic0re9njpm7coqkhurr.apps.googleusercontent.com';
 
 
-class GoogleBtn extends Component {
-   constructor(props) {
-    super(props);
+function GoogleBtn () {
 
-    this.state = {
-      isLogined: false,
-      accessToken: ''
-    };
+  const [ isLogined, setIsLogined ] = useState(false);
+  const { googleToken, setGoogleToken } = useGoogleToken();
 
-    this.login = this.login.bind(this);
-    this.handleLoginFailure = this.handleLoginFailure.bind(this);
-    this.logout = this.logout.bind(this);
-    this.handleLogoutFailure = this.handleLogoutFailure.bind(this);
-  }
-
-  login (response) {
+  function login(response) {
     if(response.accessToken){
-      this.setState(state => ({
-        isLogined: true,
-        accessToken: response.accessToken
-      }));
-    }
+        setIsLogined(true);
+        setGoogleToken(response.accessToken);
+    };
+  }
+  
+  const logout = (response) => {
+      setIsLogined(false);
+      setGoogleToken('');
   }
 
-  logout (response) {
-    this.setState(state => ({
-      isLogined: false,
-      accessToken: ''
-    }));
-  }
-
-  handleLoginFailure (response) {
+  const handleLoginFailure = (response) => {
     alert('Failed to log in')
   }
 
-  handleLogoutFailure (response) {
+  const handleLogoutFailure = (response) => {
     alert('Failed to log out')
   }
 
-  render() {
     return (
-    <div>
-      { this.state.isLogined ?
-        <GoogleLogout
-          clientId={ CLIENT_ID }
-          buttonText='Logout'
-          onLogoutSuccess={ this.logout }
-          onFailure={ this.handleLogoutFailure }
-        >
-        </GoogleLogout>: <GoogleLogin
-          clientId={ CLIENT_ID }
-          buttonText='Login'
-          onSuccess={ this.login }
-          onFailure={ this.handleLoginFailure }
-          cookiePolicy={ 'single_host_origin' }
-          responseType='code,token'
-        />
-      }
-      { this.state.accessToken ? <h5>Your Access Token: <br/><br/> { this.state.accessToken }</h5> : null }
+      <div>
+        { isLogined ?
+          <GoogleLogout
+            clientId={ CLIENT_ID }
+            buttonText='Logout'
+            onLogoutSuccess={ logout }
+            onFailure={ handleLogoutFailure }
+          >
+          </GoogleLogout>: <GoogleLogin
+            clientId={ CLIENT_ID }
+            buttonText='Login'
+            onSuccess={ login }
+            onFailure={ handleLoginFailure }
+            cookiePolicy={ 'single_host_origin' }
+            responseType='code,token'
+          />
+        }
+        { googleToken ? <h5>Your Access Token: <br/><br/> { googleToken }</h5> : null }
 
-    </div>
+      </div>
     )
-  }
 }
 
 export {GoogleBtn};
