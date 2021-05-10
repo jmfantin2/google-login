@@ -11,7 +11,7 @@ function GoogleBtn () {
   const [ isLogined, setIsLogined ] = useState(false);
   const { googleToken, setGoogleToken } = useGoogleToken();
 
-  function login(response) {
+  const login = (response) => {
     if(response.accessToken){
         setIsLogined(true);
         setGoogleToken(response.accessToken);
