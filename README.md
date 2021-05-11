@@ -8,3 +8,5 @@
 [Context com Hooks - vídeo bom pra caramba](https://www.youtube.com/watch?v=FsCBw9X9U84)
 
 [Context com Hooks - vídeo que não vi e pode ser bom também](https://www.youtube.com/watch?v=D_yxtCD_Vi0)
+
+[React Context API - persist data on page refresh](https://stackoverflow.com/questions/53453861/react-context-api-persist-data-on-page-refresh)

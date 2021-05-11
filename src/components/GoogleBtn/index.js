@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
-import { useGoogleToken } from '../../context/GoogleToken'
+// import { useGoogleToken } from '../../context/GoogleToken'
 
 
 const CLIENT_ID = '758963107546-ekp2ltbr0pd3dic0re9njpm7coqkhurr.apps.googleusercontent.com';
@@ -9,18 +9,34 @@ const CLIENT_ID = '758963107546-ekp2ltbr0pd3dic0re9njpm7coqkhurr.apps.googleuser
 function GoogleBtn () {
 
   const [ isLogined, setIsLogined ] = useState(false);
-  const { googleToken, setGoogleToken } = useGoogleToken();
+  /**
+   * OBSERVAÇÃO: isLogined só vai funcionar como o esperado
+   * quando houver comunicação com o backend, responsável por
+   * persistir o login. Front não persiste sessão sozinho.  
+   */
+
+  // const { googleToken, setGoogleToken } = useGoogleToken();
+  /**
+   * DEPRECATED
+   * Não é dever da Context API, ou do frontend, persistir 
+   * dados de login, como o Token, nesse caso.
+   * 
+   * A fins de workaround será utilizado o "localStorage", do JS.
+   */
 
   const login = (response) => {
     if(response.accessToken){
         setIsLogined(true);
-        setGoogleToken(response.accessToken);
+        //setGoogleToken(response.accessToken);
+        localStorage.setItem('token', response.accessToken);
     };
   }
   
   const logout = (response) => {
       setIsLogined(false);
-      setGoogleToken('');
+      //setGoogleToken('');
+      localStorage.setItem('token', null);
+      console.log(localStorage.removeItem('token'));
   }
 
   const handleLoginFailure = (response) => {
@@ -33,7 +49,8 @@ function GoogleBtn () {
 
     return (
       <div>
-        { isLogined ?
+        { isLogined || localStorage.getItem('token')
+           ?
           <GoogleLogout
             clientId={ CLIENT_ID }
             buttonText='Logout'
@@ -49,7 +66,7 @@ function GoogleBtn () {
             responseType='code,token'
           />
         }
-        { googleToken ? <h5>Your Access Token: <br/><br/> { googleToken }</h5> : null }
+        { localStorage.getItem('token') ? <h5>Your Access Token: <br/><br/> { localStorage.getItem('token') }</h5> : null }
 
       </div>
     )
