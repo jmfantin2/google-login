@@ -8,26 +8,15 @@ const CLIENT_ID = '758963107546-ekp2ltbr0pd3dic0re9njpm7coqkhurr.apps.googleuser
 function GoogleBtn () {
 
   const { googleToken, setGoogleToken } = useGoogleAuth();
-  
-    //const [ isLogined, setIsLogined ] = useState(false);
-  /**
-   * OBSERVAÇÃO: isLogined só vai funcionar como o esperado
-   * quando houver comunicação com o backend, responsável por
-   * persistir o login. Front não persiste sessão sozinho.  
-   */
 
   const login = (response) => {
     if(response.accessToken){
         setGoogleToken(response.accessToken);
-        //setGoogleSession(true);
-        //localStorage.setItem('token', response.accessToken);
     };
   }
   
   const logout = (response) => {
       setGoogleToken(null);
-      //setGoogleSession(false);
-      //localStorage.removeItem('token', null);
   }
 
   const handleLoginFailure = (response) => {
