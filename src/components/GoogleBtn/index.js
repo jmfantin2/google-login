@@ -1,6 +1,5 @@
-import { useState } from 'react'
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
-// import { useGoogleToken } from '../../context/GoogleToken'
+import { useGoogleAuth } from '../../context/GoogleAuth'
 
 
 const CLIENT_ID = '758963107546-ekp2ltbr0pd3dic0re9njpm7coqkhurr.apps.googleusercontent.com';
@@ -8,35 +7,27 @@ const CLIENT_ID = '758963107546-ekp2ltbr0pd3dic0re9njpm7coqkhurr.apps.googleuser
 
 function GoogleBtn () {
 
-  const [ isLogined, setIsLogined ] = useState(false);
+  const { googleToken, setGoogleToken } = useGoogleAuth();
+  
+    //const [ isLogined, setIsLogined ] = useState(false);
   /**
    * OBSERVAÇÃO: isLogined só vai funcionar como o esperado
    * quando houver comunicação com o backend, responsável por
    * persistir o login. Front não persiste sessão sozinho.  
    */
 
-  // const { googleToken, setGoogleToken } = useGoogleToken();
-  /**
-   * DEPRECATED
-   * Não é dever da Context API, ou do frontend, persistir 
-   * dados de login, como o Token, nesse caso.
-   * 
-   * A fins de workaround será utilizado o "localStorage", do JS.
-   */
-
   const login = (response) => {
     if(response.accessToken){
-        setIsLogined(true);
-        //setGoogleToken(response.accessToken);
-        localStorage.setItem('token', response.accessToken);
+        setGoogleToken(response.accessToken);
+        //setGoogleSession(true);
+        //localStorage.setItem('token', response.accessToken);
     };
   }
   
   const logout = (response) => {
-      setIsLogined(false);
-      //setGoogleToken('');
-      localStorage.setItem('token', null);
-      console.log(localStorage.removeItem('token'));
+      setGoogleToken(null);
+      //setGoogleSession(false);
+      //localStorage.removeItem('token', null);
   }
 
   const handleLoginFailure = (response) => {
@@ -49,7 +40,7 @@ function GoogleBtn () {
 
     return (
       <div>
-        { isLogined || localStorage.getItem('token')
+        { googleToken
            ?
           <GoogleLogout
             clientId={ CLIENT_ID }
@@ -57,7 +48,9 @@ function GoogleBtn () {
             onLogoutSuccess={ logout }
             onFailure={ handleLogoutFailure }
           >
-          </GoogleLogout>: <GoogleLogin
+          </GoogleLogout>
+          : 
+          <GoogleLogin
             clientId={ CLIENT_ID }
             buttonText='Login'
             onSuccess={ login }
@@ -66,7 +59,7 @@ function GoogleBtn () {
             responseType='code,token'
           />
         }
-        { localStorage.getItem('token') ? <h5>Your Access Token: <br/><br/> { localStorage.getItem('token') }</h5> : null }
+        { googleToken ? <h5>Your Access Token: <br/><br/> { googleToken }</h5> : null }
 
       </div>
     )

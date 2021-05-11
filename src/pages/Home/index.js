@@ -1,13 +1,13 @@
 import logo from '../../logo.svg';
 
-//import {useGoogleToken} from '../../context/GoogleToken'
+import {useGoogleAuth} from '../../context/GoogleAuth'
 
 function Home({location}) {
    
-  //const {googleToken} = useGoogleToken();
+  const {googleToken} = useGoogleAuth();
   return (
       <>
-					{localStorage.getItem('token') ? (
+					{googleToken ? (
 						<div>
 								<div className='nav'>
 										<div className='profile'>
@@ -26,7 +26,7 @@ function Home({location}) {
 							<p>Você precisa se logar primeiro</p>
 						</div>
 					)}
-					<p>GT: {localStorage.getItem('token')}</p>
+					<p>googleToken: {googleToken}</p>
       </>
   )
 }

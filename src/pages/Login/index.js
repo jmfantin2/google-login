@@ -1,16 +1,13 @@
-import {GoogleBtn} from '../../components/GoogleBtn'
+import {GoogleBtn} from '../../components/GoogleBtn';
+import {Link} from 'react-router-dom';
 
 function Login() {
   return( 
     <>
       <GoogleBtn/>
-      <button
-        onClick={() => {
-          window.location.href = '/home';
-        }}
-      >
-        Go to Details
-      </button>
+      <span>
+        <Link to="/home">Ir à Home</Link>
+      </span>
     </>
   )
 }
